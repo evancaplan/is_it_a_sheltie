@@ -1,0 +1,40 @@
+# Terraform
+*.tfstate
+*.tfstate.* # for any potential backups like .tfstate.backup
+.terraform/
+terraform.tfvars # if you use this for personal secrets
+*.tfplan
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
+
+# Python (for Lambda and potentially other scripts)
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+*.egg
+
+# AWS
+*.pem
+*.pem.txt
+
+# Editors and OS
+*.swp
+*.bak
+*.tmp
+*~
+.DS_Store
+.vscode/
+.idea/
+*.log
+
+# Others
+*.zip # If you're not checking in the Lambda deployment package
+!lambda_function_payload.zip # If you do want to check in a specific zip
+secrets.* # Any file named secrets with any extension
