@@ -1,8 +1,8 @@
 # Terraform
 *.tfstate
-*.tfstate.* # for any potential backups like .tfstate.backup
+*.tfstate.*
 .terraform/
-terraform.tfvars # if you use this for personal secrets
+terraform.tfvars
 *.tfplan
 crash.log
 override.tf
@@ -35,6 +35,5 @@ build/
 *.log
 
 # Others
-*.zip # If you're not checking in the Lambda deployment package
-!lambda_function_payload.zip # If you do want to check in a specific zip
-secrets.* # Any file named secrets with any extension
+*.zip
+secrets.*
