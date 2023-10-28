@@ -22,26 +22,28 @@ resource "aws_iam_role" "sheltie_image_role" {
   })
 }
 
-resource "aws_s3_bucket" "sheltie_image_bucket" {
+resource "aws_s3_bucket" "sheltie_image_comparison_bucket" {
     bucket = "sheltie-images"
 }
 
 resource "aws_s3_bucket_policy" "sheltie_image_bucket_policy" {
- bucket = aws_s3_bucket.sheltie_image_bucket.id
-
+  bucket = aws_s3_bucket.sheltie_image_comparison_bucket.id
+  
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
       {
         Effect   = "Allow",
-        Principal = aws_iam_role.sheltie_image_role.arn,
+        Principal = {
+          AWS = aws_iam_role.sheltie_image_role.arn
+        },
         Action   = "s3:GetObject",
-        Resource = aws_s3_bucket.sheltie_image_bucket.arn
+        Resource = "${aws_s3_bucket.sheltie_image_comparison_bucket.arn}/*"
       }
     ]
   })
-  
 }
+
 
 resource "aws_iam_policy" "sheltie_image_read_policy" {
   name        = "sheltie-image-read-policy"
@@ -57,8 +59,8 @@ resource "aws_iam_policy" "sheltie_image_read_policy" {
           "s3:ListBucket"
         ],
         Resource = [
-          "${aws_s3_bucket.sheltie_image_bucket.arn}",
-          "${aws_s3_bucket.sheltie_image_bucket.arn}/*"
+          "${aws_s3_bucket.sheltie_image_comparison_bucket.arn}",
+          "${aws_s3_bucket.sheltie_image_comparison_bucket.arn}/*"
         ]
       }
     ]
@@ -71,7 +73,7 @@ resource "aws_iam_role_policy_attachment" "sheltie_image_read_policy_attachment"
 }
 
 resource "aws_lambda_function" "sheltie_image_lambda" {
-    filename      = "lambda_function_payload.zip"
+    filename      = "./lambda/sheltie_determinator_function.zip"
     function_name = "sheltie_determination_function"
     role          = aws_iam_role.sheltie_image_role.arn
     handler       = "lambda_function.lambda_handler"
